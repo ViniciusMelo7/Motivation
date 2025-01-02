@@ -9,12 +9,20 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.viniciusmelo.motivation.infra.MotivationConstants
 import com.viniciusmelo.motivation.R
+<<<<<<< HEAD
+=======
+import com.viniciusmelo.motivation.data.Mock
+>>>>>>> 6334651 (second commit)
 import com.viniciusmelo.motivation.infra.SecurityPreferences
 import com.viniciusmelo.motivation.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityMainBinding
+<<<<<<< HEAD
+=======
+    private var categoryId = MotivationConstants.FILTER.ALL
+>>>>>>> 6334651 (second commit)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +43,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         binding.imageSunny.setOnClickListener(this)
 
         handleUserName()
+<<<<<<< HEAD
+=======
+        handleFilter(R.id.image_all)
+        handleNextPhrase()
+>>>>>>> 6334651 (second commit)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -46,18 +59,48 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(view: View) {
         if (view.id == R.id.button_new_phrase) {
+<<<<<<< HEAD
             var s = ""
+=======
+            handleNextPhrase()
+>>>>>>> 6334651 (second commit)
         } else if (view.id in listOf(R.id.image_all, R.id.image_happy, R.id.image_sunny)) {
             handleFilter(view.id)
         }
     }
 
+<<<<<<< HEAD
     private fun handleFilter(id: Int) {
 
         binding.imageAll
 
         if (id == R.id.image_all) {
 
+=======
+    private fun handleNextPhrase() {
+        binding.textPhrase.text = Mock().getPhrase(categoryId)
+    }
+
+    private fun handleFilter(id: Int) {
+
+        binding.imageAll.setColorFilter(ContextCompat.getColor(this, R.color.dark_purple))
+        binding.imageHappy.setColorFilter(ContextCompat.getColor(this, R.color.dark_purple))
+        binding.imageSunny.setColorFilter(ContextCompat.getColor(this, R.color.dark_purple))
+
+        when (id) {
+            R.id.image_all -> {
+                binding.imageAll.setColorFilter(ContextCompat.getColor(this, R.color.white))
+                categoryId = MotivationConstants.FILTER.ALL
+            }
+            R.id.image_happy -> {
+                binding.imageHappy.setColorFilter(ContextCompat.getColor(this, R.color.white))
+                categoryId = MotivationConstants.FILTER.HAPPY
+            }
+            R.id.image_sunny -> {
+                binding.imageSunny.setColorFilter(ContextCompat.getColor(this, R.color.white))
+                categoryId = MotivationConstants.FILTER.SUNNY
+            }
+>>>>>>> 6334651 (second commit)
         }
 
     }

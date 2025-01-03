@@ -17,49 +17,49 @@ import com.viniciusmelo.motivation.databinding.ActivityUserBinding
 class UserActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityUserBinding
+    private lateinit var securityPreferences: SecurityPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
         binding = ActivityUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.buttonSave.setOnClickListener(this)
-
-        window.statusBarColor = ContextCompat.getColor(this, R.color.purple)
         supportActionBar?.hide()
 
-        verifyUserName()
+        // Inicializa variáveis da classe
+        securityPreferences = SecurityPreferences(this)
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        // Acesso aos elementos de interface)
+        binding.buttonSave.setOnClickListener(this)
     }
 
-    override fun onClick(v: View) {
-        if (v.id == R.id.button_save) {
+     // Tratamento de clicks dos elementos
+
+    override fun onClick(view: View?) {
+        val id: Int? = view?.id
+        if (id == R.id.button_save) {
             handleSave()
         }
     }
 
-    private fun verifyUserName() {
-        val name = SecurityPreferences(this).getString(MotivationConstants.KEY.USER_NAME)
-        if (name != "") {
-            startActivity(Intent(this, MainActivity :: class.java))
-            finish()
-        }
-    }
+    // Salva o nome do usuário para utilizações futuras
 
     private fun handleSave() {
-        val name = binding.editName.text.toString()
-        if (name != "") {
-            SecurityPreferences(this).storeString(MotivationConstants.KEY.USER_NAME, name)
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
+
+        // Obtém o nome
+        val name: String = binding.editName.text.toString()
+
+        // Verifica se usuário preencheu o nome
+        if (name == "") {
+            Toast.makeText(this, getString(R.string.validation_mandatory_name), Toast.LENGTH_LONG)
+                .show()
         } else {
-            Toast.makeText(this, R.string.validation_mandatory_name, Toast.LENGTH_SHORT).show()
+            // Salva os dados do usuário e redireciona para as frases
+            securityPreferences.storeString(MotivationConstants.KEY.PERSON_NAME, name)
+
+            // Impede que seja possível voltar a Activity
+            finish()
         }
     }
 }

@@ -1,21 +1,15 @@
 package com.viniciusmelo.motivation.infra
 
 class MotivationConstants private constructor() {
-<<<<<<< HEAD
-    object KEY {
-        const val USER_NAME = "USER_NAME"
-    }
-=======
 
     object KEY {
-        const val USER_NAME = "USER_NAME"
+        const val PERSON_NAME = "personName"
     }
 
-    object FILTER {
-        const val ALL = 1
-        const val HAPPY = 2
-        const val SUNNY = 3
+    object PHRASEFILTER {
+        const val ALL = 0
+        const val HAPPY = 1
+        const val SUNNY = 2
     }
 
->>>>>>> 6334651 (second commit)
 }

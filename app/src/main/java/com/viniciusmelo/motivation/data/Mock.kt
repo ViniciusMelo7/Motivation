@@ -7,9 +7,9 @@ data class Phrase(val description: String, val categoryId: Int)
 
 class Mock {
 
-    private val all = MotivationConstants.FILTER.ALL
-    private val happy = MotivationConstants.FILTER.HAPPY
-    private val sunny = MotivationConstants.FILTER.SUNNY
+    private val all = MotivationConstants.PHRASEFILTER.ALL
+    private val happy = MotivationConstants.PHRASEFILTER.HAPPY
+    private val sunny = MotivationConstants.PHRASEFILTER.SUNNY
 
     private val mListPhrase: List<Phrase> = listOf(
         Phrase("Não sabendo que era impossível, foi lá e fez.", happy),

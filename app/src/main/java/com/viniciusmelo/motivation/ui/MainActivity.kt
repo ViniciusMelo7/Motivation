@@ -1,5 +1,5 @@
 package com.viniciusmelo.motivation.ui
-
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
@@ -9,77 +9,86 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.viniciusmelo.motivation.infra.MotivationConstants
 import com.viniciusmelo.motivation.R
-<<<<<<< HEAD
-=======
 import com.viniciusmelo.motivation.data.Mock
->>>>>>> 6334651 (second commit)
 import com.viniciusmelo.motivation.infra.SecurityPreferences
 import com.viniciusmelo.motivation.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityMainBinding
-<<<<<<< HEAD
-=======
-    private var categoryId = MotivationConstants.FILTER.ALL
->>>>>>> 6334651 (second commit)
+    private lateinit var securityPreferences: SecurityPreferences
+
+    private var filter: Int = MotivationConstants.PHRASEFILTER.ALL
+    private val mock: Mock = Mock()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Mudar a cor da Status Bar
-        window.statusBarColor = ContextCompat.getColor(this, R.color.purple)
-
-        // Esconder a barra de navegação
+        // Remove a supportActionBar
         supportActionBar?.hide()
 
-        // Eventos
-        binding.buttonNewPhrase.setOnClickListener(this)
+        // Inicializa variáveis
+        securityPreferences = SecurityPreferences(this)
+
+        // Adiciona eventos
+        setListeners()
+
+        // Inicializa
+        handleFilter(R.id.image_all)
+        refreshPhrase()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        showUserName()
+    }
+
+     // Trata eventos de click
+
+    override fun onClick(view: View) {
+        val id: Int = view.id
+
+        val listId = listOf(
+            R.id.image_all,
+            R.id.image_happy,
+            R.id.image_sunny
+        )
+        if (id in listId) {
+            handleFilter(id)
+        } else if (id == R.id.button_new_phrase) {
+            refreshPhrase()
+        } else if (id == R.id.text_user_name) {
+            startActivity(Intent(this, UserActivity::class.java))
+        }
+    }
+
+     // Atribui eventos aos elementos
+
+    private fun setListeners() {
         binding.imageAll.setOnClickListener(this)
         binding.imageHappy.setOnClickListener(this)
         binding.imageSunny.setOnClickListener(this)
-
-        handleUserName()
-<<<<<<< HEAD
-=======
-        handleFilter(R.id.image_all)
-        handleNextPhrase()
->>>>>>> 6334651 (second commit)
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-
+        binding.buttonNewPhrase.setOnClickListener(this)
+        binding.textUserName.setOnClickListener(this)
     }
 
-    override fun onClick(view: View) {
-        if (view.id == R.id.button_new_phrase) {
-<<<<<<< HEAD
-            var s = ""
-=======
-            handleNextPhrase()
->>>>>>> 6334651 (second commit)
-        } else if (view.id in listOf(R.id.image_all, R.id.image_happy, R.id.image_sunny)) {
-            handleFilter(view.id)
-        }
+     // Atualiza frase de motivação
+
+    private fun refreshPhrase() {
+        binding.textPhrase.text = mock.getPhrase(filter)
     }
 
-<<<<<<< HEAD
-    private fun handleFilter(id: Int) {
+     // Busca o nome do usuário
 
-        binding.imageAll
-
-        if (id == R.id.image_all) {
-
-=======
-    private fun handleNextPhrase() {
-        binding.textPhrase.text = Mock().getPhrase(categoryId)
+    private fun showUserName() {
+        val name = securityPreferences.getStoredString(MotivationConstants.KEY.PERSON_NAME)
+        binding.textUserName.text = "Olá, $name!"
     }
+
+     // Trata o filtro aplicado para as frases
 
     private fun handleFilter(id: Int) {
 
@@ -89,24 +98,29 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         when (id) {
             R.id.image_all -> {
-                binding.imageAll.setColorFilter(ContextCompat.getColor(this, R.color.white))
-                categoryId = MotivationConstants.FILTER.ALL
+                filter = MotivationConstants.PHRASEFILTER.ALL
+                binding.imageAll.setColorFilter(
+                    ContextCompat.getColor(this, R.color.white)
+                )
             }
             R.id.image_happy -> {
-                binding.imageHappy.setColorFilter(ContextCompat.getColor(this, R.color.white))
-                categoryId = MotivationConstants.FILTER.HAPPY
+                filter = MotivationConstants.PHRASEFILTER.HAPPY
+
+                // Possível de trocar a fonte da imagem e atribuir ao elemento de layout
+                // binding.imageHappy.setImageResource(R.drawable.ic_all)
+
+                // Possível de trocar a cor do ícone
+                binding.imageHappy.setColorFilter(
+                    ContextCompat.getColor(this, R.color.white)
+                )
             }
-            R.id.image_sunny -> {
-                binding.imageSunny.setColorFilter(ContextCompat.getColor(this, R.color.white))
-                categoryId = MotivationConstants.FILTER.SUNNY
+            else -> {
+                filter = MotivationConstants.PHRASEFILTER.SUNNY
+                binding.imageSunny.setColorFilter(
+                    ContextCompat.getColor(this, R.color.white)
+                )
             }
->>>>>>> 6334651 (second commit)
         }
 
-    }
-
-    private fun handleUserName() {
-        val name = SecurityPreferences(this).getString(MotivationConstants.KEY.USER_NAME)
-        binding.textUserName.text = "Olá, $name!"
     }
 }
